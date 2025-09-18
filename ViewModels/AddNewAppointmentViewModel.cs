@@ -4,7 +4,7 @@ using CommunityToolkit.Mvvm.ComponentModel;
 using CommunityToolkit.Mvvm.Input;
 using AppointmentSimulator.ViewModels;
 using System.Threading.Tasks;
-
+using AppointmentSimulator.Models;
 namespace AppointmentSimulator.ViewModels
 {
     public partial class AddNewAppointmentViewModel : ObservableObject
@@ -55,16 +55,16 @@ namespace AppointmentSimulator.ViewModels
                 return;
             }
 
-            var newAppointment = new AppointmentViewModel
+            var newAppointment = new Appointment
             {
                 Name = this.Name,
                 Subject = this.Subject,
-                AppointmentDate = this.AppointmentDate,
+                AppointmentDate = DateOnly.FromDateTime(this.AppointmentDate),
                 StartingTime = this.StartingTime,
                 EndingTime = this.EndingTime
             };
 
-            mainViewModel.Appointments.Add(newAppointment);
+            GlobalData.Appointments.Add(newAppointment);
 
             await App.Current.MainPage.Navigation.PopAsync();
         }

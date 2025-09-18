@@ -13,6 +13,7 @@ namespace AppointmentSimulator.Pages
             InitializeComponent();
             viewModel = new AppointmentViewModel();
             BindingContext = viewModel;
+            AppointmentsCollectionView.ItemsSource = GlobalData.Appointments;
         }
 
         private async void OnAddNewAppointmentClicked(object sender, EventArgs e)
