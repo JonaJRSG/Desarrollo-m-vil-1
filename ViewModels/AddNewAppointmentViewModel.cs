@@ -55,6 +55,20 @@ namespace AppointmentSimulator.ViewModels
                 return;
             }
 
+            // Verificar solapamiento de citas en la misma fecha
+            bool solapamiento = GlobalData.Appointments.Any(a =>
+                a.AppointmentDate == DateOnly.FromDateTime(this.AppointmentDate) &&
+                (
+                    (this.StartingTime < a.EndingTime && this.EndingTime > a.StartingTime)
+                )
+            );
+
+            if (solapamiento)
+            {
+                await App.Current.MainPage.DisplayAlert("Error", "Ya existe una cita que se solapa con el horario seleccionado.", "OK");
+                return;
+            }
+
             var newAppointment = new Appointment
             {
                 Name = this.Name,
