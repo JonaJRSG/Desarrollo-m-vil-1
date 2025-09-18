@@ -64,6 +64,10 @@
                                    Spacing="10">
                 <Button Text="Agregar Cita" />
                 <Button Text="Eliminar Cita Seleccionada" />
+                <Button Text="+" 
+                        HorizontalOptions="Start"
+                        VerticalOptions="End"
+                        Clicked="OnAddNewAppointmentClicked" />
             </HorizontalStackLayout>
 
         </VerticalStackLayout>
