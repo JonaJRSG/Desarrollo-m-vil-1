@@ -19,7 +19,8 @@
 
             <CollectionView x:Name="AppointmentsCollectionView"
                             SelectionMode="Single"
-                            Margin="0,10,0,0">
+                            Margin="0,10,0,0"
+                            SelectionChanged="AppointmentsCollectionView_SelectionChanged">
                 <CollectionView.ItemTemplate>
                     <DataTemplate>
                         <Border Stroke="#D1D1D1"

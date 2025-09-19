@@ -1,6 +1,8 @@
 ﻿using System;
 using System.Collections.ObjectModel;
+using System.Linq;
 using System.Windows.Input;
+using AppointmentSimulator.Models;
 using CommunityToolkit.Mvvm.ComponentModel;
 using CommunityToolkit.Mvvm.Input;
 
@@ -23,53 +25,65 @@ namespace AppointmentSimulator.ViewModels
         [ObservableProperty]
         private TimeSpan endingTime;
 
-        [ObservableProperty]
-        private ObservableCollection<AppointmentViewModel> appointments = new();
+        private readonly AppointmentViewModel mainViewModel;
 
-        [ObservableProperty]
-        private AppointmentViewModel selectedAppointment;
-
-        public AppointmentViewModel()
+        public AppointmentViewModel(AppointmentViewModel mainViewModel)
         {
-            AddAppointmentCommand = new RelayCommand(AddAppointment);
-            DeleteAppointmentCommand = new RelayCommand(DeleteAppointment, CanDeleteAppointment);
+            this.mainViewModel = mainViewModel;
+            SaveAppointmentCommand = new AsyncRelayCommand(SaveAppointmentAsync);
         }
 
-        public ICommand AddAppointmentCommand { get; }
-        public ICommand DeleteAppointmentCommand { get; }
+        public ICommand SaveAppointmentCommand { get; }
 
-        private void AddAppointment()
+        private async Task SaveAppointmentAsync()
         {
-            var newAppointment = new AppointmentViewModel
+            if (string.IsNullOrWhiteSpace(Name) ||
+                string.IsNullOrWhiteSpace(Subject))
             {
+                await App.Current.MainPage.DisplayAlert("Error", "Todos los campos son obligatorios.", "OK");
+                return;
+            }
+
+            if (AppointmentDate < DateTime.Today)
+            {
+                await App.Current.MainPage.DisplayAlert("Error", "La fecha debe ser hoy o posterior.", "OK");
+                return;
+            }
+
+            if (StartingTime >= EndingTime)
+            {
+                await App.Current.MainPage.DisplayAlert("Error", "La hora de inicio debe ser menor a la de término.", "OK");
+                return;
+            }
+
+            // Verificar solapamiento de citas en la misma fecha
+            bool solapamiento = GlobalData.Appointments.Any(a =>
+                a.AppointmentDate == DateOnly.FromDateTime(this.AppointmentDate) &&
+                (
+                    (this.StartingTime < a.EndingTime && this.EndingTime > a.StartingTime)
+                )
+            );
+
+            if (solapamiento)
+            {
+                await App.Current.MainPage.DisplayAlert("Error", "Ya existe una cita que se solapa con el horario seleccionado.", "OK");
+                return;
+            }
+
+            var newAppointment = new Appointment
+            {
+                Id = Guid.NewGuid().ToString(),
                 Name = this.Name,
                 Subject = this.Subject,
-                AppointmentDate = this.AppointmentDate,
+                AppointmentDate = DateOnly.FromDateTime(this.AppointmentDate),
                 StartingTime = this.StartingTime,
                 EndingTime = this.EndingTime
             };
-            Appointments.Add(newAppointment);
 
-            // Limpiar campos
-            Name = string.Empty;
-            Subject = string.Empty;
-            AppointmentDate = DateTime.Today;
-            StartingTime = TimeSpan.Zero;
-            EndingTime = TimeSpan.Zero;
+            GlobalData.Appointments.Add(newAppointment);
+
+            await App.Current.MainPage.Navigation.PopAsync();
         }
 
-        private void DeleteAppointment()
-        {
-            if (SelectedAppointment != null)
-            {
-                Appointments.Remove(SelectedAppointment);
-                SelectedAppointment = null;
-            }
-        }
-
-        private bool CanDeleteAppointment()
-        {
-            return SelectedAppointment != null;
-        }
     }
 }

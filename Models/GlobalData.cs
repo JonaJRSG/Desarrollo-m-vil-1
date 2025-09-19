@@ -7,6 +7,7 @@ namespace AppointmentSimulator.Models
         public static ObservableCollection<Appointment> Appointments { get; } = [
             new Appointment
             {
+                Id = Guid.NewGuid().ToString(),
                 Name = "Alejandro Barroeta",
                 Subject = "Cambio de carrera",
                 AppointmentDate = new DateOnly(2025,09,14),
