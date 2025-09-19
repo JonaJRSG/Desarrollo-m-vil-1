@@ -34,5 +34,21 @@ namespace AppointmentSimulator.Pages
                 idOculto = selectedAppointment.Id;
             }
         }
+
+        private async void OnDeleteAppointmentClicked(object sender, EventArgs e)
+        {
+            if (string.IsNullOrEmpty(idOculto))
+            {
+                await DisplayAlert("Error", "No hay ninguna cita seleccionada para eliminar.", "OK");
+                return;
+            }
+            var confirm = await DisplayAlert("Confirmar", "¿Estás seguro de que deseas eliminar esta cita?", "Sí", "No");
+            if (confirm)
+            {
+                await viewModel.RemoveAppointmentById(idOculto);
+                AppointmentsCollectionView.SelectedItem = null; // Deseleccionar el ítem
+                idOculto = null; // Limpiar el id oculto
+            }
+        }
     }
 }

@@ -31,9 +31,11 @@ namespace AppointmentSimulator.ViewModels
         {
             this.mainViewModel = mainViewModel;
             SaveAppointmentCommand = new AsyncRelayCommand(SaveAppointmentAsync);
+            RemoveAppointmentByIdCommand = new AsyncRelayCommand<string>(RemoveAppointmentById);
         }
 
         public ICommand SaveAppointmentCommand { get; }
+        public ICommand RemoveAppointmentByIdCommand { get; }
 
         private async Task SaveAppointmentAsync()
         {
@@ -84,6 +86,24 @@ namespace AppointmentSimulator.ViewModels
 
             await App.Current.MainPage.Navigation.PopAsync();
         }
+        
+        public async Task RemoveAppointmentById(string? id)
+        {
+            if (id == null)
+            {
+                await App.Current.MainPage.DisplayAlert("Error", "El registro no existe", "OK");
+                return;
+            }
 
+            var appointment = GlobalData.Appointments.FirstOrDefault(a => a.Id == id);
+            if (appointment != null)
+            {
+                GlobalData.Appointments.Remove(appointment);
+            }
+            else
+            {
+                await App.Current.MainPage.DisplayAlert("Error", "El registro no existe", "OK");
+            }
+        }
     }
 }

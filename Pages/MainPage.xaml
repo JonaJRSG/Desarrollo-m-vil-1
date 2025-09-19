@@ -14,7 +14,8 @@
                     HorizontalOptions="Start"
                     VerticalOptions="End"
                     Clicked="OnAddNewAppointmentClicked" />
-                <Button Text="Eliminar Cita Seleccionada" />
+                <Button Text="Eliminar Cita Seleccionada" 
+                        Clicked="OnDeleteAppointmentClicked" />
             </HorizontalStackLayout>
 
             <CollectionView x:Name="AppointmentsCollectionView"
