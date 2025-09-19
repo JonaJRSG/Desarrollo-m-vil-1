@@ -63,7 +63,8 @@ namespace AppointmentSimulator.Pages
             var confirm = await DisplayAlert("Confirmar", "¿Estás seguro de que deseas eliminar esta cita?", "Sí", "No");
             if (confirm)
             {
-                await viewModel.RemoveAppointmentById(idOculto);
+                var AppointmentViewModel = new AppointmentViewModel(viewModel);
+                await AppointmentViewModel.RemoveAppointmentById(idOculto);
                 AppointmentsCollectionView.SelectedItem = null; // Deseleccionar el ítem
                 idOculto = null; // Limpiar el id oculto
             }

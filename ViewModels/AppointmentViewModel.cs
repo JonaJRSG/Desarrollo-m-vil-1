@@ -42,6 +42,7 @@ namespace AppointmentSimulator.ViewModels
         /// 
         /// </summary>
         public ICommand SaveAppointmentCommand { get; }
+
         /// <summary>
         /// 
         /// </summary>
