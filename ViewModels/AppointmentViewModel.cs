@@ -27,6 +27,10 @@ namespace AppointmentSimulator.ViewModels
 
         private readonly AppointmentViewModel mainViewModel;
 
+        /// <summary>
+        /// 
+        /// </summary>
+        /// <param name="mainViewModel"></param>
         public AppointmentViewModel(AppointmentViewModel mainViewModel)
         {
             this.mainViewModel = mainViewModel;
@@ -34,9 +38,19 @@ namespace AppointmentSimulator.ViewModels
             RemoveAppointmentByIdCommand = new AsyncRelayCommand<string>(RemoveAppointmentById);
         }
 
+        /// <summary>
+        /// 
+        /// </summary>
         public ICommand SaveAppointmentCommand { get; }
+        /// <summary>
+        /// 
+        /// </summary>
         public ICommand RemoveAppointmentByIdCommand { get; }
 
+        /// <summary>
+        /// 
+        /// </summary>
+        /// <returns></returns>
         private async Task SaveAppointmentAsync()
         {
             if (string.IsNullOrWhiteSpace(Name) ||
@@ -87,6 +101,11 @@ namespace AppointmentSimulator.ViewModels
             await App.Current.MainPage.Navigation.PopAsync();
         }
         
+        /// <summary>
+        /// 
+        /// </summary>
+        /// <param name="id"></param>
+        /// <returns></returns>
         public async Task RemoveAppointmentById(string? id)
         {
             if (id == null)

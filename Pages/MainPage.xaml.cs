@@ -9,6 +9,9 @@ namespace AppointmentSimulator.Pages
         private AppointmentViewModel viewModel;
         private string idOculto;
 
+        /// <summary>
+        /// 
+        /// </summary>
         public MainPage()
         {
             InitializeComponent();
@@ -17,6 +20,11 @@ namespace AppointmentSimulator.Pages
             AppointmentsCollectionView.ItemsSource = GlobalData.Appointments;
         }
 
+        /// <summary>
+        /// 
+        /// </summary>
+        /// <param name="sender"></param>
+        /// <param name="e"></param>
         private async void OnAddNewAppointmentClicked(object sender, EventArgs e)
         {
             var addViewModel = new AppointmentViewModel(viewModel);
@@ -27,6 +35,11 @@ namespace AppointmentSimulator.Pages
             await Navigation.PushAsync(addPage);
         }
 
+        /// <summary>
+        /// 
+        /// </summary>
+        /// <param name="sender"></param>
+        /// <param name="e"></param>
         private void AppointmentsCollectionView_SelectionChanged(object sender, SelectionChangedEventArgs e)
         {
             if (e.CurrentSelection.FirstOrDefault() is Appointment selectedAppointment)
@@ -35,6 +48,11 @@ namespace AppointmentSimulator.Pages
             }
         }
 
+        /// <summary>
+        /// 
+        /// </summary>
+        /// <param name="sender"></param>
+        /// <param name="e"></param>
         private async void OnDeleteAppointmentClicked(object sender, EventArgs e)
         {
             if (string.IsNullOrEmpty(idOculto))
